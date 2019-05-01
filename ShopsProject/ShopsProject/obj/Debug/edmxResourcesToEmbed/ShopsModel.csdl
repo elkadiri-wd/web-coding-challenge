@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="shopsModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+  <EntityContainer Name="shopsEntities" p1:LazyLoadingEnabled="true">
+    <EntitySet Name="logins" EntityType="shopsModel.login" />
+    <EntitySet Name="shops" EntityType="shopsModel.shop" />
+    <AssociationSet Name="userFK" Association="shopsModel.userFK">
+      <End Role="login" EntitySet="logins" />
+      <End Role="shop" EntitySet="shops" />
+    </AssociationSet>
+  </EntityContainer>
+  <EntityType Name="login">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="email" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+    <Property Name="password" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="shops" Relationship="shopsModel.userFK" FromRole="login" ToRole="shop" />
+  </EntityType>
+  <EntityType Name="shop">
+    <Key>
+      <PropertyRef Name="id" />
+    </Key>
+    <Property Name="id" Type="Int32" Nullable="false" />
+    <Property Name="userId" Type="Int32" />
+    <Property Name="name" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+    <Property Name="distance" Type="Decimal" Precision="18" Scale="2" />
+    <Property Name="imagePath" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+    <Property Name="isPreferred" Type="Boolean" />
+    <Property Name="isDisliked" Type="Boolean" />
+    <NavigationProperty Name="login" Relationship="shopsModel.userFK" FromRole="shop" ToRole="login" />
+  </EntityType>
+  <Association Name="userFK">
+    <End Role="login" Type="shopsModel.login" Multiplicity="0..1" />
+    <End Role="shop" Type="shopsModel.shop" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="login">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="shop">
+        <PropertyRef Name="userId" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+</Schema>

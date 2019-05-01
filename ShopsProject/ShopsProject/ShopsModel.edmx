@@ -1,0 +1,145 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="shopsModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityContainer Name="shopsModelStoreContainer">
+          <EntitySet Name="login" EntityType="shopsModel.Store.login" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="shop" EntityType="shopsModel.Store.shop" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="userFK" Association="shopsModel.Store.userFK">
+            <End Role="login" EntitySet="login" />
+            <End Role="shop" EntitySet="shop" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="login">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="email" Type="varchar" MaxLength="50" />
+          <Property Name="password" Type="varchar" MaxLength="50" />
+        </EntityType>
+        <EntityType Name="shop">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
+          <Property Name="userId" Type="int" />
+          <Property Name="name" Type="varchar" MaxLength="50" />
+          <Property Name="distance" Type="decimal" Scale="2" />
+          <Property Name="imagePath" Type="varchar" MaxLength="200" />
+          <Property Name="isPreferred" Type="bit" />
+          <Property Name="isDisliked" Type="bit" />
+        </EntityType>
+        <Association Name="userFK">
+          <End Role="login" Type="shopsModel.Store.login" Multiplicity="0..1" />
+          <End Role="shop" Type="shopsModel.Store.shop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="login">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="shop">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="shopsModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityContainer Name="shopsEntities" p1:LazyLoadingEnabled="true">
+          <EntitySet Name="logins" EntityType="shopsModel.login" />
+          <EntitySet Name="shops" EntityType="shopsModel.shop" />
+          <AssociationSet Name="userFK" Association="shopsModel.userFK">
+            <End Role="login" EntitySet="logins" />
+            <End Role="shop" EntitySet="shops" />
+          </AssociationSet>
+        </EntityContainer>
+        <EntityType Name="login">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="email" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="password" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <NavigationProperty Name="shops" Relationship="shopsModel.userFK" FromRole="login" ToRole="shop" />
+        </EntityType>
+        <EntityType Name="shop">
+          <Key>
+            <PropertyRef Name="id" />
+          </Key>
+          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="userId" Type="Int32" />
+          <Property Name="name" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
+          <Property Name="distance" Type="Decimal" Precision="18" Scale="2" />
+          <Property Name="imagePath" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
+          <Property Name="isPreferred" Type="Boolean" />
+          <Property Name="isDisliked" Type="Boolean" />
+          <NavigationProperty Name="login" Relationship="shopsModel.userFK" FromRole="shop" ToRole="login" />
+        </EntityType>
+        <Association Name="userFK">
+          <End Role="login" Type="shopsModel.login" Multiplicity="0..1" />
+          <End Role="shop" Type="shopsModel.shop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="login">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="shop">
+              <PropertyRef Name="userId" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="shopsModelStoreContainer" CdmEntityContainer="shopsEntities">
+          <EntitySetMapping Name="logins">
+            <EntityTypeMapping TypeName="shopsModel.login">
+              <MappingFragment StoreEntitySet="login">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="email" ColumnName="email" />
+                <ScalarProperty Name="password" ColumnName="password" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="shops">
+            <EntityTypeMapping TypeName="shopsModel.shop">
+              <MappingFragment StoreEntitySet="shop">
+                <ScalarProperty Name="id" ColumnName="id" />
+                <ScalarProperty Name="userId" ColumnName="userId" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="distance" ColumnName="distance" />
+                <ScalarProperty Name="imagePath" ColumnName="imagePath" />
+                <ScalarProperty Name="isPreferred" ColumnName="isPreferred" />
+                <ScalarProperty Name="isDisliked" ColumnName="isDisliked" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="True" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
