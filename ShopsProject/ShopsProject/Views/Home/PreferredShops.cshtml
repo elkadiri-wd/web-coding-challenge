@@ -1,0 +1,43 @@
+﻿@model List<ShopsProject.shop>
+@{
+    ViewBag.Title = "PreferredShops";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>PreferredShops</h2>
+<table>
+    @for (int i = 0; i < Model.Count; i = i + 4)
+    {
+        <tr>
+            <td>
+                <b>@Model[i].name</b>
+                <img width="200" height="200" title="@Model[i].name" src="@Model[i].imagePath" />
+                <input type="button" value="Remove" style="background-color: red; color: white; float: left; width: 100px" />
+            </td>
+            <td>
+                @if (i + 1 < Model.Count)
+                {
+                    <b>@Model[i + 1].name</b>
+                    <img width="200" height="200" title="@Model[i + 1].name" src="@Model[i + 1].imagePath" />
+                    <input type="button" value="Remove" style="background-color: red; color: white; float: left; width: 100px" />
+                }
+            </td>
+            <td>
+                @if (i + 2 < Model.Count)
+                {
+                    <b>@Model[i + 2].name</b>
+                    <img width="200" height="200" title="@Model[i + 2].name" src="@Model[i + 2].imagePath" />
+                    <input type="button" value="Remove" style="background-color: red; color: white; float: left; width: 100px" />
+                }
+            </td>
+            <td>
+                @if (i + 3 < Model.Count)
+                {
+                    <b>@Model[i + 3].name</b>
+                    <img width="200" height="200" title="@Model[i + 3].name" src="@Model[i + 3].imagePath" />
+                    <input type="button" value="Remove" style="background-color: red; color: white; float: left; width: 100px" />
+                }
+            </td>
+        </tr>
+    }
+</table>

@@ -1,0 +1,41 @@
+﻿@model List<ShopsProject.shop>
+@{
+    ViewBag.Title = "NearbyShops";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<table>
+    <tr>
+        @for (int i = 0; i < 4; i++)
+        {
+            if (i < @Model.Count())
+            {            
+            <td>
+                <b>@Model[i].name</b>                
+                <img width="200" height="200" title="@Model[i].name" src="@Model[i].imagePath" />
+                <input type="button" value="Dislike" style="background-color:red; color:white; float:left; width:100px" /><input type="button" value="Like" style="background-color:green; color:white; width:65px; margin-left:27px" />
+            </td>  
+            }
+        }
+    </tr>
+    <tr>
+        @for (int i = 4; i < 8; i++)
+        {
+            if (i < @Model.Count())
+            {                     
+            <td>
+                <b>@Model[i].name</b>
+                <img width="200" height="200" title="@Model[i].name" src="@Model[i].imagePath" />
+                <input type="button" value="Dislike" style="background-color:red; color:white; float:left; width:100px" /><input type="button" value="Like" style="background-color:green; color:white; width:65px; margin-left:27px" />
+            </td>   
+            }
+        }
+
+    </tr>
+
+</table>
+
+@*<table>
+    <tr>
+        <td><img width="180" height="180"  title="shop1" src="@Model.ElementAt(0).imagePath" /></td><td><img width="180" height="180" title="shop2" src="@Model.ElementAt(1).imagePath" /></td><td><img width="180" height="180" title="shop3" src="@Model.ElementAt(2).imagePath" /></td><td><img width="180" height="180" title="shop4" src="@Model.ElementAt(3).imagePath" /></td>
+    </tr>
+</table>*@

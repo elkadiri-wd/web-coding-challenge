@@ -14,15 +14,8 @@ namespace ShopsProject
     
     public partial class login
     {
-        public login()
-        {
-            this.shops = new HashSet<shop>();
-        }
-    
         public int id { get; set; }
         public string email { get; set; }
         public string password { get; set; }
-    
-        public virtual ICollection<shop> shops { get; set; }
     }
 }

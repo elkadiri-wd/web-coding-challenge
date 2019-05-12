@@ -43,6 +43,7 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
+    <Reference Include="System.Device" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
@@ -192,6 +193,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>ShopsModel.edmx</DependentUpon>
     </Compile>
+    <Compile Include="StringCipher.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -251,6 +253,10 @@
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <None Include="Scripts\jquery-1.7.1.intellisense.js" />
+    <Content Include="Images\shop1.jpg" />
+    <Content Include="Images\shop2.jpg" />
+    <Content Include="Images\shop3.jpg" />
+    <Content Include="Images\shop4.jpg" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />
@@ -314,6 +320,8 @@
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
+    <Content Include="Views\Home\NearbyShops.cshtml" />
+    <Content Include="Views\Home\PreferredShops.cshtml" />
     <EntityDeploy Include="ShopsModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>ShopsModel.Designer.cs</LastGenOutput>

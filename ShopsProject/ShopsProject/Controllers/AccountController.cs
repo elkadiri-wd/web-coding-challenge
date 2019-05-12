@@ -10,6 +10,10 @@ using Microsoft.Web.WebPages.OAuth;
 using WebMatrix.WebData;
 using ShopsProject.Filters;
 using ShopsProject.Models;
+using System.Security.Cryptography;
+using System.Text;
+using System.IO;
+using System.Data.Entity.Validation;
 
 namespace ShopsProject.Controllers
 {
@@ -17,7 +21,8 @@ namespace ShopsProject.Controllers
     [InitializeSimpleMembership]
     public class AccountController : Controller
     {
-        private shopsEntities shopsContext = new shopsEntities();
+        private shopsEntities1 shopsContext = new shopsEntities1();
+        private const string PLAINTEXT = "SHOPPING";
         //
         // GET: /Account/Login
 
@@ -34,14 +39,17 @@ namespace ShopsProject.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public ActionResult Login(LoginModel model, string returnUrl)
+        public ActionResult Login(LoginModel model, string returnUrl, FormCollection fc)
         {
+            string latitude = fc["hidLatitude"];
+            string longitude = fc["hidLongitude"];
             if (ModelState.IsValid)
-            {
-                login users = shopsContext.logins.FirstOrDefault(a => a.email == model.Email && a.password == model.Password);
-                if (users != null)
+            {                
+                login user = shopsContext.logins.FirstOrDefault(a => a.email == model.Email && a.password==model.Password);
+
+                if (user != null)
                 {
-                    return RedirectToLocal(returnUrl);
+                    return RedirectToAction("NearbyShops", "Home", new { latitude = latitude, longitude = longitude });
                 }
             }
 
@@ -86,12 +94,17 @@ namespace ShopsProject.Controllers
                 {
                     //WebSecurity.CreateUserAndAccount(model.UserName, model.Password);
                     //WebSecurity.Login(model.UserName, model.Password);
+                    try
+                    {
+
+
                     var user = shopsContext.logins.FirstOrDefault(a => a.email == model.Email);
                     if (user == null)
                     {
                         login login = new login();
                         login.email = model.Email;
                         login.password = model.Password;
+
                         shopsContext.logins.Add(login);
                         shopsContext.SaveChanges();
                         ViewBag.RegisterState = "User successfully registered";
@@ -101,7 +114,21 @@ namespace ShopsProject.Controllers
                         ModelState.AddModelError("", "There is already an account with the same email address");
                     }
 
-
+                    }
+                    catch (DbEntityValidationException e)
+                    {
+                        foreach (var eve in e.EntityValidationErrors)
+                        {
+                            Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                                eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                            foreach (var ve in eve.ValidationErrors)
+                            {
+                                Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                                    ve.PropertyName, ve.ErrorMessage);
+                            }
+                        }
+                        throw;
+                    }
                 }
                 catch (MembershipCreateUserException e)
                 {
@@ -112,7 +139,8 @@ namespace ShopsProject.Controllers
             // If we got this far, something failed, redisplay form
             return RedirectToAction("Index", "Home");
         }
-
+             
+        
         //
         // POST: /Account/Disassociate
 

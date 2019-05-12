@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-  <EntityContainerMapping StorageEntityContainer="shopsModelStoreContainer" CdmEntityContainer="shopsEntities">
+  <EntityContainerMapping StorageEntityContainer="shopsModelStoreContainer" CdmEntityContainer="shopsEntities1">
     <EntitySetMapping Name="logins">
       <EntityTypeMapping TypeName="shopsModel.login">
         <MappingFragment StoreEntitySet="login">
@@ -13,13 +13,13 @@
     <EntitySetMapping Name="shops">
       <EntityTypeMapping TypeName="shopsModel.shop">
         <MappingFragment StoreEntitySet="shop">
-          <ScalarProperty Name="id" ColumnName="id" />
-          <ScalarProperty Name="userId" ColumnName="userId" />
-          <ScalarProperty Name="name" ColumnName="name" />
-          <ScalarProperty Name="distance" ColumnName="distance" />
-          <ScalarProperty Name="imagePath" ColumnName="imagePath" />
-          <ScalarProperty Name="isPreferred" ColumnName="isPreferred" />
+          <ScalarProperty Name="latitude" ColumnName="latitude" />
+          <ScalarProperty Name="longitude" ColumnName="longitude" />
           <ScalarProperty Name="isDisliked" ColumnName="isDisliked" />
+          <ScalarProperty Name="isPreferred" ColumnName="isPreferred" />
+          <ScalarProperty Name="imagePath" ColumnName="imagePath" />
+          <ScalarProperty Name="name" ColumnName="name" />
+          <ScalarProperty Name="id" ColumnName="id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

@@ -11,17 +11,18 @@ namespace ShopsProject
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations.Schema;
     
     public partial class shop
     {
         public int id { get; set; }
-        public Nullable<int> userId { get; set; }
         public string name { get; set; }
-        public Nullable<decimal> distance { get; set; }
         public string imagePath { get; set; }
+        [NotMapped]
+        public double distance { get; set; }
         public Nullable<bool> isPreferred { get; set; }
         public Nullable<bool> isDisliked { get; set; }
-    
-        public virtual login login { get; set; }
+        public Nullable<decimal> longitude { get; set; }
+        public Nullable<decimal> latitude { get; set; }
     }
 }

@@ -4,14 +4,10 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="shopsModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="shopsModel.Store" Alias="Self" Provider="System.Data.SqlClient" ProviderManifestToken="2008" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityContainer Name="shopsModelStoreContainer">
           <EntitySet Name="login" EntityType="shopsModel.Store.login" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="shop" EntityType="shopsModel.Store.shop" store:Type="Tables" Schema="dbo" />
-          <AssociationSet Name="userFK" Association="shopsModel.Store.userFK">
-            <End Role="login" EntitySet="login" />
-            <End Role="shop" EntitySet="shop" />
-          </AssociationSet>
         </EntityContainer>
         <EntityType Name="login">
           <Key>
@@ -19,85 +15,54 @@
           </Key>
           <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="email" Type="varchar" MaxLength="50" />
-          <Property Name="password" Type="varchar" MaxLength="50" />
+          <Property Name="password" Type="varchar" MaxLength="250" />
         </EntityType>
         <EntityType Name="shop">
           <Key>
             <PropertyRef Name="id" />
           </Key>
           <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="userId" Type="int" />
           <Property Name="name" Type="varchar" MaxLength="50" />
-          <Property Name="distance" Type="decimal" Scale="2" />
           <Property Name="imagePath" Type="varchar" MaxLength="200" />
           <Property Name="isPreferred" Type="bit" />
           <Property Name="isDisliked" Type="bit" />
+          <Property Name="longitude" Type="decimal" Scale="6" />
+          <Property Name="latitude" Type="decimal" Scale="6" />
         </EntityType>
-        <Association Name="userFK">
-          <End Role="login" Type="shopsModel.Store.login" Multiplicity="0..1" />
-          <End Role="shop" Type="shopsModel.Store.shop" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="login">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="shop">
-              <PropertyRef Name="userId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="shopsModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
-        <EntityContainer Name="shopsEntities" p1:LazyLoadingEnabled="true">
+        <EntityContainer Name="shopsEntities1" p1:LazyLoadingEnabled="true">
           <EntitySet Name="logins" EntityType="shopsModel.login" />
           <EntitySet Name="shops" EntityType="shopsModel.shop" />
-          <AssociationSet Name="userFK" Association="shopsModel.userFK">
-            <End Role="login" EntitySet="logins" />
-            <End Role="shop" EntitySet="shops" />
-          </AssociationSet>
         </EntityContainer>
         <EntityType Name="login">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
+          <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="email" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="password" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
-          <NavigationProperty Name="shops" Relationship="shopsModel.userFK" FromRole="login" ToRole="shop" />
+          <Property Name="password" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
         </EntityType>
         <EntityType Name="shop">
           <Key>
             <PropertyRef Name="id" />
           </Key>
-          <Property Name="id" Type="Int32" Nullable="false" />
-          <Property Name="userId" Type="Int32" />
-          <Property Name="name" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
-          <Property Name="distance" Type="Decimal" Precision="18" Scale="2" />
-          <Property Name="imagePath" Type="String" MaxLength="200" Unicode="false" FixedLength="false" />
-          <Property Name="isPreferred" Type="Boolean" />
-          <Property Name="isDisliked" Type="Boolean" />
-          <NavigationProperty Name="login" Relationship="shopsModel.userFK" FromRole="shop" ToRole="login" />
+          <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Type="String" Name="name" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Type="String" Name="imagePath" MaxLength="200" FixedLength="false" Unicode="false" />
+          <Property Type="Boolean" Name="isPreferred" />
+          <Property Type="Boolean" Name="isDisliked" />
+          <Property Type="Decimal" Name="longitude" Precision="18" Scale="6" />
+          <Property Type="Decimal" Name="latitude" Precision="18" Scale="6" />
         </EntityType>
-        <Association Name="userFK">
-          <End Role="login" Type="shopsModel.login" Multiplicity="0..1" />
-          <End Role="shop" Type="shopsModel.shop" Multiplicity="*" />
-          <ReferentialConstraint>
-            <Principal Role="login">
-              <PropertyRef Name="id" />
-            </Principal>
-            <Dependent Role="shop">
-              <PropertyRef Name="userId" />
-            </Dependent>
-          </ReferentialConstraint>
-        </Association>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="shopsModelStoreContainer" CdmEntityContainer="shopsEntities">
+        <EntityContainerMapping StorageEntityContainer="shopsModelStoreContainer" CdmEntityContainer="shopsEntities1">
           <EntitySetMapping Name="logins">
             <EntityTypeMapping TypeName="shopsModel.login">
               <MappingFragment StoreEntitySet="login">
@@ -110,13 +75,13 @@
           <EntitySetMapping Name="shops">
             <EntityTypeMapping TypeName="shopsModel.shop">
               <MappingFragment StoreEntitySet="shop">
-                <ScalarProperty Name="id" ColumnName="id" />
-                <ScalarProperty Name="userId" ColumnName="userId" />
-                <ScalarProperty Name="name" ColumnName="name" />
-                <ScalarProperty Name="distance" ColumnName="distance" />
-                <ScalarProperty Name="imagePath" ColumnName="imagePath" />
-                <ScalarProperty Name="isPreferred" ColumnName="isPreferred" />
+                <ScalarProperty Name="latitude" ColumnName="latitude" />
+                <ScalarProperty Name="longitude" ColumnName="longitude" />
                 <ScalarProperty Name="isDisliked" ColumnName="isDisliked" />
+                <ScalarProperty Name="isPreferred" ColumnName="isPreferred" />
+                <ScalarProperty Name="imagePath" ColumnName="imagePath" />
+                <ScalarProperty Name="name" ColumnName="name" />
+                <ScalarProperty Name="id" ColumnName="id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>

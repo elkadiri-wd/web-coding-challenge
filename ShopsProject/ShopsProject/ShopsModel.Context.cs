@@ -13,10 +13,10 @@ namespace ShopsProject
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class shopsEntities : DbContext
+    public partial class shopsEntities1 : DbContext
     {
-        public shopsEntities()
-            : base("name=shopsEntities")
+        public shopsEntities1()
+            : base("name=shopsEntities1")
         {
         }
     
