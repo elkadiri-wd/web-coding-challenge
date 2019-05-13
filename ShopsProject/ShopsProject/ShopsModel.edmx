@@ -8,6 +8,15 @@
         <EntityContainer Name="shopsModelStoreContainer">
           <EntitySet Name="login" EntityType="shopsModel.Store.login" store:Type="Tables" Schema="dbo" />
           <EntitySet Name="shop" EntityType="shopsModel.Store.shop" store:Type="Tables" Schema="dbo" />
+          <EntitySet Name="UserShop" EntityType="shopsModel.Store.UserShop" store:Type="Tables" Schema="dbo" />
+          <AssociationSet Name="fk_login" Association="shopsModel.Store.fk_login">
+            <End Role="login" EntitySet="login" />
+            <End Role="UserShop" EntitySet="UserShop" />
+          </AssociationSet>
+          <AssociationSet Name="fk_shop" Association="shopsModel.Store.fk_shop">
+            <End Role="shop" EntitySet="shop" />
+            <End Role="UserShop" EntitySet="UserShop" />
+          </AssociationSet>
         </EntityContainer>
         <EntityType Name="login">
           <Key>
@@ -24,19 +33,62 @@
           <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="name" Type="varchar" MaxLength="50" />
           <Property Name="imagePath" Type="varchar" MaxLength="200" />
-          <Property Name="isPreferred" Type="bit" />
-          <Property Name="isDisliked" Type="bit" />
           <Property Name="longitude" Type="decimal" Scale="6" />
           <Property Name="latitude" Type="decimal" Scale="6" />
         </EntityType>
+        <EntityType Name="UserShop">
+          <Key>
+            <PropertyRef Name="login_id" />
+            <PropertyRef Name="shop_id" />
+          </Key>
+          <Property Name="login_id" Type="int" Nullable="false" />
+          <Property Name="shop_id" Type="int" Nullable="false" />
+          <Property Name="likedDate" Type="datetime" />
+          <Property Name="dislikedDate" Type="datetime" />
+          <Property Name="isPreferred" Type="bit" />
+          <Property Name="isDisliked" Type="bit" />
+        </EntityType>
+        <Association Name="fk_login">
+          <End Role="login" Type="shopsModel.Store.login" Multiplicity="1" />
+          <End Role="UserShop" Type="shopsModel.Store.UserShop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="login">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserShop">
+              <PropertyRef Name="login_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_shop">
+          <End Role="shop" Type="shopsModel.Store.shop" Multiplicity="1" />
+          <End Role="UserShop" Type="shopsModel.Store.UserShop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="shop">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserShop">
+              <PropertyRef Name="shop_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
       </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="shopsModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityContainer Name="shopsEntities1" p1:LazyLoadingEnabled="true">
           <EntitySet Name="logins" EntityType="shopsModel.login" />
-          <EntitySet Name="shops" EntityType="shopsModel.shop" />
-        </EntityContainer>
+          <EntitySet Name="shop" EntityType="shopsModel.shop" />
+          <EntitySet Name="UserShop" EntityType="shopsModel.UserShop" />
+          <AssociationSet Name="fk_login" Association="shopsModel.fk_login">
+            <End Role="login" EntitySet="logins" />
+            <End Role="UserShop" EntitySet="UserShop" />
+          </AssociationSet>
+          <AssociationSet Name="fk_shop" Association="shopsModel.fk_shop">
+            <End Role="shop" EntitySet="shop" />
+            <End Role="UserShop" EntitySet="UserShop" />
+          </AssociationSet>
+          </EntityContainer>
         <EntityType Name="login">
           <Key>
             <PropertyRef Name="id" />
@@ -44,7 +96,8 @@
           <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
           <Property Name="email" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
           <Property Name="password" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
-        </EntityType>
+          <NavigationProperty Name="UserShop" Relationship="shopsModel.fk_login" FromRole="login" ToRole="UserShop" />
+          </EntityType>
         <EntityType Name="shop">
           <Key>
             <PropertyRef Name="id" />
@@ -52,12 +105,49 @@
           <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Type="String" Name="name" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Type="String" Name="imagePath" MaxLength="200" FixedLength="false" Unicode="false" />
-          <Property Type="Boolean" Name="isPreferred" />
-          <Property Type="Boolean" Name="isDisliked" />
           <Property Type="Decimal" Name="longitude" Precision="18" Scale="6" />
           <Property Type="Decimal" Name="latitude" Precision="18" Scale="6" />
+          <NavigationProperty Name="UserShop" Relationship="shopsModel.fk_shop" FromRole="shop" ToRole="UserShop" />
         </EntityType>
-      </Schema>
+        <EntityType Name="UserShop">
+          <Key>
+            <PropertyRef Name="login_id" />
+            <PropertyRef Name="shop_id" />
+          </Key>
+          <Property Type="Int32" Name="login_id" Nullable="false" />
+          <Property Type="Int32" Name="shop_id" Nullable="false" />
+          <Property Type="DateTime" Name="likedDate" Precision="3" />
+          <Property Type="DateTime" Name="dislikedDate" Precision="3" />
+          <Property Type="Boolean" Name="isPreferred" />
+          <Property Type="Boolean" Name="isDisliked" />
+          <NavigationProperty Name="login" Relationship="shopsModel.fk_login" FromRole="UserShop" ToRole="login" />
+          <NavigationProperty Name="shop" Relationship="shopsModel.fk_shop" FromRole="UserShop" ToRole="shop" />
+        </EntityType>
+        <Association Name="fk_login">
+          <End Type="shopsModel.login" Role="login" Multiplicity="1" />
+          <End Type="shopsModel.UserShop" Role="UserShop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="login">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserShop">
+              <PropertyRef Name="login_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fk_shop">
+          <End Type="shopsModel.shop" Role="shop" Multiplicity="1" />
+          <End Type="shopsModel.UserShop" Role="UserShop" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="shop">
+              <PropertyRef Name="id" />
+            </Principal>
+            <Dependent Role="UserShop">
+              <PropertyRef Name="shop_id" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
     <edmx:Mappings>
@@ -72,16 +162,26 @@
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
-          <EntitySetMapping Name="shops">
+          <EntitySetMapping Name="shop">
             <EntityTypeMapping TypeName="shopsModel.shop">
               <MappingFragment StoreEntitySet="shop">
                 <ScalarProperty Name="latitude" ColumnName="latitude" />
                 <ScalarProperty Name="longitude" ColumnName="longitude" />
-                <ScalarProperty Name="isDisliked" ColumnName="isDisliked" />
-                <ScalarProperty Name="isPreferred" ColumnName="isPreferred" />
                 <ScalarProperty Name="imagePath" ColumnName="imagePath" />
                 <ScalarProperty Name="name" ColumnName="name" />
                 <ScalarProperty Name="id" ColumnName="id" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="UserShop">
+            <EntityTypeMapping TypeName="shopsModel.UserShop">
+              <MappingFragment StoreEntitySet="UserShop">
+                <ScalarProperty Name="isDisliked" ColumnName="isDisliked" />
+                <ScalarProperty Name="isPreferred" ColumnName="isPreferred" />
+                <ScalarProperty Name="dislikedDate" ColumnName="dislikedDate" />
+                <ScalarProperty Name="likedDate" ColumnName="likedDate" />
+                <ScalarProperty Name="shop_id" ColumnName="shop_id" />
+                <ScalarProperty Name="login_id" ColumnName="login_id" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -99,8 +199,8 @@
     <Options>
       <DesignerInfoPropertySet>
         <DesignerProperty Name="ValidateOnBuild" Value="true" />
-        <DesignerProperty Name="EnablePluralization" Value="True" />
-        <DesignerProperty Name="IncludeForeignKeysInModel" Value="True" />
+        <DesignerProperty Name="EnablePluralization" Value="False" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="False" />
         <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
       </DesignerInfoPropertySet>
     </Options>

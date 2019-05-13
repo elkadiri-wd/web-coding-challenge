@@ -27,5 +27,6 @@ namespace ShopsProject
     
         public DbSet<login> logins { get; set; }
         public DbSet<shop> shops { get; set; }
+        public DbSet<UserShop> UserShop { get; set; }
     }
 }

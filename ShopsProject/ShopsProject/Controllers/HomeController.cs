@@ -33,16 +33,29 @@ namespace ShopsProject.Controllers
 
         public ActionResult NearbyShops()
         {
-            try
+            if (Session["LoginId"] != null)
             {
-                double latitude = Convert.ToDouble(Request.QueryString["latitude"]);
-                double longitude = Convert.ToDouble(Request.QueryString["longitude"]);
-                shop sh = new shop();
+                int loginId = Convert.ToInt32(Session["LoginId"]);
+                double latitude = Convert.ToDouble(Session["latitude"]);
+                double longitude = Convert.ToDouble(Session["longitude"]);
                 var currentCoord = new GeoCoordinate(latitude, longitude);
-                //var eCoord = new GeoCoordinate(eLatitude, eLongitude);
-                //return sCoord.GetDistanceTo(eCoord);
-                var shopsList = shopsContext.shops.ToList();
-                for (int i = 0; i < shopsList.Count; i++ )
+
+                var shopsList = (from sh in shopsContext.shops
+                                 where !shopsContext.UserShop.Any(us => us.shop_id == sh.id && us.login_id==loginId)
+                                 select sh).ToList<shop>();
+                
+                var likedShops = (from sh in shopsContext.shops                                  
+                                  join us in shopsContext.UserShop on sh.id equals us.shop_id
+                                  where us.isPreferred == false && us.login_id == loginId                                  
+                                  select sh).ToList<shop>();
+
+                foreach (var likedShop in likedShops)
+                {
+                    if (shopsContext.shops.Any(a => a.id == likedShop.id))
+                        shopsList.Add(likedShop);
+                }
+                
+                for (int i = 0; i < shopsList.Count; i++)
                 {
                     var eCoord = new GeoCoordinate(Convert.ToDouble(shopsList[i].latitude), Convert.ToDouble(shopsList[i].longitude));
                     var distance = currentCoord.GetDistanceTo(eCoord);
@@ -51,18 +64,70 @@ namespace ShopsProject.Controllers
                 var orderedShopList = shopsList.OrderBy(x => x.distance).ToList();
                 return View(orderedShopList);
             }
-            catch (Exception ex)
-            {
-                throw ex;
-            }
+
+            return RedirectToAction("Login", "Account");            
         }
 
         public ActionResult PreferredShops()
         {
-            ViewBag.Message = "Your Preferred Shops page";
-            var preferredShops = shopsContext.shops.Where(x => x.isPreferred == true).ToList();
+            if (Session["LoginId"] != null)
+            {
+                int loginId = Convert.ToInt32(Session["LoginId"]);
+                ViewBag.Message = "Your Preferred Shops page";
+                List<shop> preferredShops = (from sh in shopsContext.shops
+                                             join us in shopsContext.UserShop on sh.id equals us.shop_id
+                                             where us.isPreferred == true && us.login_id == loginId
+                                             select sh).ToList<shop>();
 
-            return View(preferredShops);
+                //var preferredShops = shopsContext.shops.Where(x => x.isPreferred == true).ToList();
+
+                return View(preferredShops);
+            }
+
+            return RedirectToAction("Login", "Account"); 
+        }
+
+        [HttpPost]
+        public string SetPreferredShop(string shopId, bool flag)
+        {
+            var idUser = Convert.ToInt32(Session["LoginId"]);
+            var idShop = int.Parse(shopId);
+            UserShop shopResult = (from us in shopsContext.UserShop
+                                   where us.login_id == idUser && us.shop_id == idShop
+                                   select us).SingleOrDefault();
+
+            if (shopResult == null)
+            {
+                UserShop us = new UserShop();
+                us.login_id = idUser;
+                us.shop_id = idShop;
+                us.isPreferred = flag;
+                us.isDisliked = false;
+                us.likedDate = DateTime.Now;
+
+                shopsContext.UserShop.Add(us);
+                shopsContext.SaveChanges();
+            }
+            else if (flag == true)
+            {
+                shopResult.isPreferred = true;
+                shopsContext.SaveChanges();
+            }
+            else if (flag == false)
+            {
+                shopResult.isPreferred = false;
+                shopsContext.SaveChanges();
+            }
+
+            return "";
+        }
+
+        [HttpPost]
+        public string SetPosition(string latitude, string longitude)
+        {
+            Session["latitude"] = latitude;
+            Session["longitude"] = longitude;
+            return "";
         }
     }
 }

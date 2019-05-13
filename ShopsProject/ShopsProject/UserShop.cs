@@ -12,17 +12,16 @@ namespace ShopsProject
     using System;
     using System.Collections.Generic;
     
-    public partial class login
+    public partial class UserShop
     {
-        public login()
-        {
-            this.UserShop = new HashSet<UserShop>();
-        }
+        public int login_id { get; set; }
+        public int shop_id { get; set; }
+        public Nullable<System.DateTime> likedDate { get; set; }
+        public Nullable<System.DateTime> dislikedDate { get; set; }
+        public Nullable<bool> isPreferred { get; set; }
+        public Nullable<bool> isDisliked { get; set; }
     
-        public int id { get; set; }
-        public string email { get; set; }
-        public string password { get; set; }
-    
-        public virtual ICollection<UserShop> UserShop { get; set; }
+        public virtual login login { get; set; }
+        public virtual shop shop { get; set; }
     }
 }

@@ -3,6 +3,15 @@
   <EntityContainer Name="shopsModelStoreContainer">
     <EntitySet Name="login" EntityType="shopsModel.Store.login" store:Type="Tables" Schema="dbo" />
     <EntitySet Name="shop" EntityType="shopsModel.Store.shop" store:Type="Tables" Schema="dbo" />
+    <EntitySet Name="UserShop" EntityType="shopsModel.Store.UserShop" store:Type="Tables" Schema="dbo" />
+    <AssociationSet Name="fk_login" Association="shopsModel.Store.fk_login">
+      <End Role="login" EntitySet="login" />
+      <End Role="UserShop" EntitySet="UserShop" />
+    </AssociationSet>
+    <AssociationSet Name="fk_shop" Association="shopsModel.Store.fk_shop">
+      <End Role="shop" EntitySet="shop" />
+      <End Role="UserShop" EntitySet="UserShop" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="login">
     <Key>
@@ -19,9 +28,43 @@
     <Property Name="id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
     <Property Name="name" Type="varchar" MaxLength="50" />
     <Property Name="imagePath" Type="varchar" MaxLength="200" />
-    <Property Name="isPreferred" Type="bit" />
-    <Property Name="isDisliked" Type="bit" />
     <Property Name="longitude" Type="decimal" Scale="6" />
     <Property Name="latitude" Type="decimal" Scale="6" />
   </EntityType>
+  <EntityType Name="UserShop">
+    <Key>
+      <PropertyRef Name="login_id" />
+      <PropertyRef Name="shop_id" />
+    </Key>
+    <Property Name="login_id" Type="int" Nullable="false" />
+    <Property Name="shop_id" Type="int" Nullable="false" />
+    <Property Name="likedDate" Type="datetime" />
+    <Property Name="dislikedDate" Type="datetime" />
+    <Property Name="isPreferred" Type="bit" />
+    <Property Name="isDisliked" Type="bit" />
+  </EntityType>
+  <Association Name="fk_login">
+    <End Role="login" Type="shopsModel.Store.login" Multiplicity="1" />
+    <End Role="UserShop" Type="shopsModel.Store.UserShop" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="login">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="UserShop">
+        <PropertyRef Name="login_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_shop">
+    <End Role="shop" Type="shopsModel.Store.shop" Multiplicity="1" />
+    <End Role="UserShop" Type="shopsModel.Store.UserShop" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="shop">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="UserShop">
+        <PropertyRef Name="shop_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

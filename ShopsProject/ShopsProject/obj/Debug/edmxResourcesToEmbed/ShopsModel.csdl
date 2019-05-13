@@ -2,7 +2,16 @@
 <Schema Namespace="shopsModel" Alias="Self" p1:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:p1="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
   <EntityContainer Name="shopsEntities1" p1:LazyLoadingEnabled="true">
     <EntitySet Name="logins" EntityType="shopsModel.login" />
-    <EntitySet Name="shops" EntityType="shopsModel.shop" />
+    <EntitySet Name="shop" EntityType="shopsModel.shop" />
+    <EntitySet Name="UserShop" EntityType="shopsModel.UserShop" />
+    <AssociationSet Name="fk_login" Association="shopsModel.fk_login">
+      <End Role="login" EntitySet="logins" />
+      <End Role="UserShop" EntitySet="UserShop" />
+    </AssociationSet>
+    <AssociationSet Name="fk_shop" Association="shopsModel.fk_shop">
+      <End Role="shop" EntitySet="shop" />
+      <End Role="UserShop" EntitySet="UserShop" />
+    </AssociationSet>
   </EntityContainer>
   <EntityType Name="login">
     <Key>
@@ -11,6 +20,7 @@
     <Property Name="id" Type="Int32" Nullable="false" p1:StoreGeneratedPattern="Identity" />
     <Property Name="email" Type="String" MaxLength="50" Unicode="false" FixedLength="false" />
     <Property Name="password" Type="String" MaxLength="250" Unicode="false" FixedLength="false" />
+    <NavigationProperty Name="UserShop" Relationship="shopsModel.fk_login" FromRole="login" ToRole="UserShop" />
   </EntityType>
   <EntityType Name="shop">
     <Key>
@@ -19,9 +29,46 @@
     <Property Type="Int32" Name="id" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
     <Property Type="String" Name="name" MaxLength="50" FixedLength="false" Unicode="false" />
     <Property Type="String" Name="imagePath" MaxLength="200" FixedLength="false" Unicode="false" />
-    <Property Type="Boolean" Name="isPreferred" />
-    <Property Type="Boolean" Name="isDisliked" />
     <Property Type="Decimal" Name="longitude" Precision="18" Scale="6" />
     <Property Type="Decimal" Name="latitude" Precision="18" Scale="6" />
+    <NavigationProperty Name="UserShop" Relationship="shopsModel.fk_shop" FromRole="shop" ToRole="UserShop" />
   </EntityType>
+  <EntityType Name="UserShop">
+    <Key>
+      <PropertyRef Name="login_id" />
+      <PropertyRef Name="shop_id" />
+    </Key>
+    <Property Type="Int32" Name="login_id" Nullable="false" />
+    <Property Type="Int32" Name="shop_id" Nullable="false" />
+    <Property Type="DateTime" Name="likedDate" Precision="3" />
+    <Property Type="DateTime" Name="dislikedDate" Precision="3" />
+    <Property Type="Boolean" Name="isPreferred" />
+    <Property Type="Boolean" Name="isDisliked" />
+    <NavigationProperty Name="login" Relationship="shopsModel.fk_login" FromRole="UserShop" ToRole="login" />
+    <NavigationProperty Name="shop" Relationship="shopsModel.fk_shop" FromRole="UserShop" ToRole="shop" />
+  </EntityType>
+  <Association Name="fk_login">
+    <End Type="shopsModel.login" Role="login" Multiplicity="1" />
+    <End Type="shopsModel.UserShop" Role="UserShop" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="login">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="UserShop">
+        <PropertyRef Name="login_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="fk_shop">
+    <End Type="shopsModel.shop" Role="shop" Multiplicity="1" />
+    <End Type="shopsModel.UserShop" Role="UserShop" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="shop">
+        <PropertyRef Name="id" />
+      </Principal>
+      <Dependent Role="UserShop">
+        <PropertyRef Name="shop_id" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
 </Schema>

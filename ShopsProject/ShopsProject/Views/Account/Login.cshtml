@@ -31,8 +31,8 @@
                 @Html.LabelFor(m => m.RememberMe, new { @class = "checkbox" })
             </li>
         </ol>
-        @Html.Hidden("hidLatitude", null, new { id="hidLatitude" })
-        @Html.Hidden("hidLongitude", null, new { id="hidLongitude" })
+        @*@Html.Hidden("hidLatitude", null, new { id="hidLatitude" })
+        @Html.Hidden("hidLongitude", null, new { id="hidLongitude" })*@
         <input type="submit" value="Log in" />
     </fieldset>
     <p>
@@ -41,26 +41,6 @@
 }
 
 @section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-
-    <script type="text/javascript">
-        getLocation();
-        //var x = document.getElementById("demo");
-        function getLocation() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(showPosition);
-            } else {
-                //x.innerHTML = "Geolocation is not supported by this browser.";
-            }
-        }
-        function showPosition(position) {
-            //x.innerHTML = "Latitude: " + position.coords.latitude +
-            //    "<br>Longitude: " + position.coords.longitude;
-
-            $('#hidLatitude').val(position.coords.latitude);
-            $('#hidLongitude').val(position.coords.longitude);
-        }
-
-    </script>
-
+    @Scripts.Render("~/bundles/jqueryval")    
+    @Scripts.Render("~/bundles/coords") 
 }

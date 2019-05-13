@@ -194,6 +194,9 @@
       <DependentUpon>ShopsModel.edmx</DependentUpon>
     </Compile>
     <Compile Include="StringCipher.cs" />
+    <Compile Include="UserShop.cs">
+      <DependentUpon>ShopsModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -257,6 +260,7 @@
     <Content Include="Images\shop2.jpg" />
     <Content Include="Images\shop3.jpg" />
     <Content Include="Images\shop4.jpg" />
+    <Content Include="Scripts\Coords.js" />
     <Content Include="Scripts\jquery-1.7.1.js" />
     <Content Include="Scripts\jquery-1.7.1.min.js" />
     <None Include="Scripts\jquery.validate-vsdoc.js" />

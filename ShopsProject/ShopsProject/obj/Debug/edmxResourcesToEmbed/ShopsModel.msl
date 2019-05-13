@@ -10,16 +10,26 @@
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>
-    <EntitySetMapping Name="shops">
+    <EntitySetMapping Name="shop">
       <EntityTypeMapping TypeName="shopsModel.shop">
         <MappingFragment StoreEntitySet="shop">
           <ScalarProperty Name="latitude" ColumnName="latitude" />
           <ScalarProperty Name="longitude" ColumnName="longitude" />
-          <ScalarProperty Name="isDisliked" ColumnName="isDisliked" />
-          <ScalarProperty Name="isPreferred" ColumnName="isPreferred" />
           <ScalarProperty Name="imagePath" ColumnName="imagePath" />
           <ScalarProperty Name="name" ColumnName="name" />
           <ScalarProperty Name="id" ColumnName="id" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserShop">
+      <EntityTypeMapping TypeName="shopsModel.UserShop">
+        <MappingFragment StoreEntitySet="UserShop">
+          <ScalarProperty Name="isDisliked" ColumnName="isDisliked" />
+          <ScalarProperty Name="isPreferred" ColumnName="isPreferred" />
+          <ScalarProperty Name="dislikedDate" ColumnName="dislikedDate" />
+          <ScalarProperty Name="likedDate" ColumnName="likedDate" />
+          <ScalarProperty Name="shop_id" ColumnName="shop_id" />
+          <ScalarProperty Name="login_id" ColumnName="login_id" />
         </MappingFragment>
       </EntityTypeMapping>
     </EntitySetMapping>

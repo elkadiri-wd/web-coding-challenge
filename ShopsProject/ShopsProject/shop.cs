@@ -15,14 +15,19 @@ namespace ShopsProject
     
     public partial class shop
     {
+        public shop()
+        {
+            this.UserShop = new HashSet<UserShop>();
+        }
+    
         public int id { get; set; }
         public string name { get; set; }
         public string imagePath { get; set; }
-        [NotMapped]
-        public double distance { get; set; }
-        public Nullable<bool> isPreferred { get; set; }
-        public Nullable<bool> isDisliked { get; set; }
         public Nullable<decimal> longitude { get; set; }
         public Nullable<decimal> latitude { get; set; }
+        [NotMapped]
+        public double distance { get; set; }
+    
+        public virtual ICollection<UserShop> UserShop { get; set; }
     }
 }
