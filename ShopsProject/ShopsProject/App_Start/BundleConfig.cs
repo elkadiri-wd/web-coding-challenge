@@ -25,6 +25,8 @@ namespace ShopsProject
 
             bundles.Add(new ScriptBundle("~/bundles/coords").Include(
                         "~/Scripts/Coords.js"));
+            bundles.Add(new ScriptBundle("~/bundles/preferredshops").Include(
+                        "~/Scripts/preferredshops.js"));
 
             bundles.Add(new StyleBundle("~/Content/css").Include("~/Content/site.css"));
 

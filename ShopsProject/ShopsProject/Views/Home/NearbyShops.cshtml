@@ -6,57 +6,41 @@
 <table>
     <tr>
         @for (int i = 0; i < Model.Count; i = i + 4)
-        {   
-            <tr>
-                <td>
-                    <b>@Model[i].name</b>
-                    <img width="200" height="200" title="@Model[i].name" src="@Model[i].imagePath" />
-                    <input type="button" value="Dislike" style="background-color: red; color: white; float: left; width: 100px"  onclick="setPreferred(@Model[i].id, false);" /><input type="button" value="Like" style="background-color: green; color: white; width: 65px; margin-left: 27px" onclick="    setPreferred(@Model[i].id, true);" />
+        {
+        <tr>
+            <td style="width: 200px">
+                <b>@Model[i].name</b>
+                <img width="200" height="200" title="@Model[i].name" src="@Model[i].imagePath" />
+                <input type="button" value="Dislike" style="background-color: red; color: white; float: left; width: 100px" onclick="setPreferred(@Model[i].id, false);" /><input type="button" value="Like" style="background-color: green; color: white; width: 65px; margin-left: 27px" onclick="setPreferred(@Model[i].id, true);" />
+            </td>
+            @if (i + 1 < Model.Count)
+            {
+                <td style="width: 200px">
+                    <b>@Model[i + 1].name</b>
+                    <img width="200" height="200" title="@Model[i + 1].name" src="@Model[i + 1].imagePath" />
+                    <input type="button" value="Dislike" style="background-color: red; color: white; float: left; width: 100px" onclick="setPreferred(@Model[i + 1].id, false);" /><input type="button" value="Like" style="background-color: green; color: white; width: 65px; margin-left: 27px" onclick="setPreferred(@Model[i + 1].id, true);" />
                 </td>
-                @if (i + 1 < Model.Count)
-                {                   
-                    <td style="width: 200px">
-                        <b>@Model[i + 1].name</b>
-                        <img width="200" height="200" title="@Model[i + 1].name" src="@Model[i + 1].imagePath" />
-                        <input type="button" value="Dislike" style="background-color: red; color: white; float: left; width: 100px" onclick="setPreferred(@Model[i + 1].id, false);" /><input type="button" value="Like" style="background-color: green; color: white; width: 65px; margin-left: 27px" onclick="    setPreferred(@Model[i + 1].id), true;" />
-                    </td>
-                }
-                @if (i + 2 < Model.Count)
-                {
-                    <td style="width: 200px">
-                        <b>@Model[i + 2].name</b>
-                        <img width="200" height="200" title="@Model[i + 2].name" src="@Model[i + 2].imagePath" />
-                        <input type="button" value="Dislike" style="background-color: red; color: white; float: left; width: 100px" onclick="setPreferred(@Model[i + 2].id, false);" /><input type="button" value="Like" style="background-color: green; color: white; width: 65px; margin-left: 27px" onclick="    setPreferred(@Model[i + 2].id), true;" />
-                    </td>
-                }
-                @if (i + 3 < Model.Count)
-                {
-                    <td style="width: 200px">
-                        <b>@Model[i + 3].name</b>
-                        <img width="200" height="200" title="@Model[i + 3].name" src="@Model[i + 3].imagePath" />
-                        <input type="button" value="Dislike" style="background-color: red; color: white; float: left; width: 100px" onclick="setPreferred(@Model[i + 3].id, false);" /><input type="button" value="Like" style="background-color: green; color: white; width: 65px; margin-left: 27px" onclick="    setPreferred(@Model[i + 3].id), true;" />
-                    </td>
-                }
-            </tr>
-        }
+            }
+            @if (i + 2 < Model.Count)
+            {
+                <td style="width: 200px">
+                    <b>@Model[i + 2].name</b>
+                    <img width="200" height="200" title="@Model[i + 2].name" src="@Model[i + 2].imagePath" />
+                    <input type="button" value="Dislike" style="background-color: red; color: white; float: left; width: 100px" onclick="setPreferred(@Model[i + 2].id, false);" /><input type="button" value="Like" style="background-color: green; color: white; width: 65px; margin-left: 27px" onclick="setPreferred(@Model[i + 2].id, true);" />
+                </td>
+            }
+            @if (i + 3 < Model.Count)
+            {
+                <td style="width: 200px">
+                    <b>@Model[i + 3].name</b>
+                    <img width="200" height="200" title="@Model[i + 3].name" src="@Model[i + 3].imagePath" />
+                    <input type="button" value="Dislike" style="background-color: red; color: white; float: left; width: 100px" onclick="setPreferred(@Model[i + 3].id, false);" /><input type="button" value="Like" style="background-color: green; color: white; width: 65px; margin-left: 27px" onclick="setPreferred(@Model[i + 3].id, true);" />
+                </td>
+            }
+        </tr>
+    }
 
-</table>
-@section Scripts{
-    <script type="text/javascript">
-        function setPreferred(shopId, flag){
-            $.ajax({
-                type: "POST",
-                url: "/Home/SetPreferredShop",
-                contentType: "application/json; charset=utf-8",
-                data: '{"shopId":"' + shopId + '", "flag":"' + flag + '"}',
-                dataType: "html",
-                success: function (result, status, xhr) {
-                },
-                error: function (xhr, status, error) {
-                }
-            });
-                    
-            return false;
-        }
-    </script>
-}
+    </table>
+    @section Scripts{
+        @Scripts.Render("~/bundles/preferredshops") 
+    }
