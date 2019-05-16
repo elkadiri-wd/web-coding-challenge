@@ -52,7 +52,7 @@ namespace ShopsProject.Controllers
                 foreach (var userShop in usersShops)
                 {
                     DateTime dislikedDate = userShop.dislikedDate ?? DateTime.Now;
-                    if (userShop.login_id == loginId && userShop.isPreferred == false && DateTime.Now.Subtract(dislikedDate) > new TimeSpan(0, 10, 0))
+                    if (userShop.login_id == loginId && userShop.isPreferred == false && DateTime.Now.Subtract(dislikedDate) > new TimeSpan(2, 0, 0))
                         shopsList.Add(shopsContext.shops.Where(a => a.id == userShop.shop_id).SingleOrDefault());
                 }
 
